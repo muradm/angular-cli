@@ -33,9 +33,10 @@ const globalFileName = '.angular-config.json';
 
 function xdgConfigHome(home: string, configFile?: string): string {
   // https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
-  const p = process.env['XDG_CONFIG_HOME'] || path.join(home, '.config', 'angular');
+  const xdgConfigHome = process.env['XDG_CONFIG_HOME'] || path.join(home, '.config');
+  const xdgAngularHome = path.join(xdgConfigHome, 'angular');
 
-  return configFile ? path.join(p, configFile) : p;
+  return configFile ? path.join(xdgAngularHome, configFile) : xdgAngularHome;
 }
 
 function projectFilePath(projectPath?: string): string | null {
@@ -56,7 +57,7 @@ function globalFilePath(): string | null {
   // note that createGlobalSettings() will continue creating
   // global file in home directory, with this user will have
   // choice to move change its location to meet XDG convention
-  const xdgConfig = xdgConfigHome(home, globalFileName);
+  const xdgConfig = xdgConfigHome(home, 'config.json');
   if (existsSync(xdgConfig)) {
     return xdgConfig;
   }
